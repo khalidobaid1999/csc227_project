@@ -27,14 +27,42 @@ public class Process {
 	
 	
 	public int getCPUBurstTime() {
-		int length = CPUBursts.size();
+		int length = this.CPUBursts.size();
 		int sum_time = 0;
 		for(int i=0; i<length; i++)
-			sum_time += CPUBursts.get(i);
+			sum_time += this.CPUBursts.get(i);
 		return sum_time;
 	}
 	
 	
+	public void setState(ProcessState p) {
+		this.state = p;
+	}
+	
+	
+	public void incrementCPUCounter() {
+		this.CPUCounter++;
+	}
+	
+	
+	public void incrementIOCounter() {
+		this.IOTotalCounter++;
+	}
+	
+	
+	public void incrementMemoryWaitCounter() {
+		this.memoryWaitCounter++;
+	}
+	
+	
+	public void incrementPreemptionCounter() {
+		this.preemptionCounter++;
+	}
+	
+	
+	public void addToTotalIOTime(int time) {
+		this.IOTotalTime += time;
+	}
 	
 	
 }
