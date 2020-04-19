@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
+
 public class Memory {
 
     public PriorityQueue<Process> readyQueue;
@@ -33,35 +35,6 @@ public class Memory {
             size += process.memoryUsage.get(0);
         }
         
-    }
-
-    //TODO: Impelement deadlock handling
-    public boolean isDeadlock(){
-        Iterator<Process> waitingIterator = waitingQueue.iterator();
-        boolean flag = false;
-                
-        if(!readyQueue.isEmpty()){
-            return false;
-        }
-
-        while(waitingIterator.hasNext()){
-            Process p = waitingIterator.next();
-            
-            if(!waitingIterator.hasNext()){
-                break;
-            }
-
-            Process p1 = waitingIterator.next();
-
-            if(p.memoryUsage.get(p.getIOCounter() - 1) == p1.memoryUsage.get(p1.getIOCounter() - 1) ){
-                flag = true;
-            } else {
-                flag = false;
-            }
-        }
-
-        return flag;
-
     }
 
     public boolean areQueuesEmpty(){
