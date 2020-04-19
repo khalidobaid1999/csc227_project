@@ -8,9 +8,9 @@ public class CPU {
     }
 
     public void simulateMachineExecuteCycle() {
-        System.out.println(currentCPUTime);          
-        System.out.println(m.readyQueue);
-        System.out.println(m.waitingQueue);
+        // System.out.println(currentCPUTime);          
+        // System.out.println(m.readyQueue);
+        // System.out.println(m.waitingQueue);
         currentCPUTime++;
 
         if(runningProcess == null){  
@@ -23,6 +23,7 @@ public class CPU {
         }
 
         if (runningProcess.CPUBursts.get(runningProcess.getIOCounter()) == 0) {
+            System.out.println(runningProcess);
 
             if (runningProcess.getIOCounter() == runningProcess.IOBursts.size()) {
                 runningProcess.setState(ProcessState.TERMINATED);
