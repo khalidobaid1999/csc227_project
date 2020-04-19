@@ -4,157 +4,153 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-import com.sun.java.swing.action.FinishAction;
-
 public class Util {
     static Random random = new Random();
 
     public static void main(String[] args) {
-        File f = new File("input.txt");
-        try {
-            writeFile(10);
+	File f = new File("input.txt");
+	try {
+//	    writeFile(10);
 
-            Queue<Process> readFile = readFile(f);
-            Memory mainMemory = new Memory(readFile, 1024);
-            CPU mainProcessor = new CPU(mainMemory);
+	    Queue<Process> readFile = readFile(f);
+	    Memory mainMemory = new Memory(readFile, 1024);
+	    CPU mainProcessor = new CPU(mainMemory);
 
-            mainMemory.longTermScheduele();
-            while (!mainMemory.areQueuesEmpty() || mainProcessor.runningProcess != null)
-            {
-                if(mainProcessor.currentCPUTime % 200 == 0){
-                    mainMemory.longTermScheduele();
-                }
-            mainProcessor.simulateMachineExecuteCycle();
-            }
-            System.out.println(mainMemory.finishedProcesses);
-            
-            //Test this below to generate a process_output.txt file
-            //writeProcessOutputs((LinkedList)mainMemory.finishedProcesses);
+	    mainMemory.longTermScheduele();
+	    while (!mainMemory.areQueuesEmpty() || mainProcessor.runningProcess != null) {
+		if (mainProcessor.currentCPUTime % 200 == 0) {
+		    mainMemory.longTermScheduele();
+		}
+		mainProcessor.simulateMachineExecuteCycle();
+	    }
+	    System.out.println(mainMemory.finishedProcesses);
 
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	    // Test this below to generate a process_output.txt file
+	    writeProcessOutputs((LinkedList<Process>) mainMemory.finishedProcesses);
+
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
     }
 
     public static Queue<Process> readFile(File f) throws FileNotFoundException {
-        Queue<Process> q = new LinkedList<Process>();
-        Scanner sc = new Scanner(f);
+	Queue<Process> q = new LinkedList<Process>();
+	Scanner sc = new Scanner(f);
 
-        while (sc.hasNextLine()) {
+	while (sc.hasNextLine()) {
 
-            String currentProcessName = "";
-            ArrayList<Integer> currentIObursts = new ArrayList<Integer>();
-            ArrayList<Integer> currentCPUbursts = new ArrayList<Integer>();
-            ArrayList<Integer> currentMemoryUsage = new ArrayList<Integer>();
+	    String currentProcessName = "";
+	    ArrayList<Integer> currentIObursts = new ArrayList<Integer>();
+	    ArrayList<Integer> currentCPUbursts = new ArrayList<Integer>();
+	    ArrayList<Integer> currentMemoryUsage = new ArrayList<Integer>();
 
-            String currentLine = sc.nextLine();
-            if (currentLine.matches("")) {
-                continue;
-            }
-            String[] split = currentLine.split("\\[");
-            currentProcessName = split[0];
-            getList(currentCPUbursts, split[1]);
-            getList(currentMemoryUsage, split[2]);
-            getList(currentIObursts, split[3]);
-            
-            Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
-            q.add(p);
+	    String currentLine = sc.nextLine();
+	    if (currentLine.matches("")) {
+		continue;
+	    }
+	    String[] split = currentLine.split("\\[");
+	    currentProcessName = split[0];
+	    getList(currentCPUbursts, split[1]);
+	    getList(currentMemoryUsage, split[2]);
+	    getList(currentIObursts, split[3]);
 
-            currentIObursts = new ArrayList<Integer>();
-            currentCPUbursts = new ArrayList<Integer>();
-            currentMemoryUsage = new ArrayList<Integer>();
+	    Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
+	    q.add(p);
 
-        }
+	    currentIObursts = new ArrayList<Integer>();
+	    currentCPUbursts = new ArrayList<Integer>();
+	    currentMemoryUsage = new ArrayList<Integer>();
 
-        sc.close();
-        return q;
+	}
+
+	sc.close();
+	return q;
     }
 
     private static void getList(ArrayList<Integer> currentCPUbursts, String substring) {
-        substring = substring.trim().replaceAll("[\\[\\]]", "");
-        String[] split = substring.split(",");
-        for (String string : split) {
-            currentCPUbursts.add(Integer.parseInt(string.trim()));
-        }
+	substring = substring.trim().replaceAll("[\\[\\]]", "");
+	String[] split = substring.split(",");
+	for (String string : split) {
+	    currentCPUbursts.add(Integer.parseInt(string.trim()));
+	}
     }
 
     // TODO: Implement the process statistics output
-    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) throws IOException{
-        File output = new File("proccess_output.txt");
-        PrintWriter w = new PrintWriter(output);
-        String prcstat = "";
-        
-    	for(int i = 0; i < finishedProcesses.size(); i++) {
-        	prcstat += "\n-------------------------";
-        	prcstat += "\nProcess ID: "+finishedProcesses.get(i).getId();
-        	prcstat += "\nProgram name: "+finishedProcesses.get(i).getName();
-        	prcstat += "\nReady queue entry time: "+finishedProcesses.get(i).getReadyQueueEntryTime();
-        	prcstat += "\nNo. of times in the CPU: "+finishedProcesses.get(i).getCPUCounter();
-        	prcstat += "\nTotal time spent in CPU: "+finishedProcesses.get(i).getCPUBurstTime();
-        	prcstat += "\nNo. of times in I/O: "+finishedProcesses.get(i).getIOTotalCounter();
-        	prcstat += "\nTotal time spent in I/O: "+finishedProcesses.get(i).getIOTotalTime();
-        	prcstat += "\nNo. of times waiting for memory: "+finishedProcesses.get(i).getMemoryWaitCounter();
-        	prcstat += "\nNo. of times it was preempted: "+finishedProcesses.get(i).getPreemptionCounter();
-        	prcstat += "\nNo. of times it was TERMINATED/KILLED: "+finishedProcesses.get(i).getTerminationKillTime();
-        	prcstat += "\nFinal state: "+finishedProcesses.get(i).getState();
-        	prcstat += "\nCPU utilization: "+finishedProcesses.get(i).getTotalCPUTime();
-        	prcstat += "\n-------------------------";
-        	w.println(prcstat);
-        	prcstat = "";
-        }
-    	w.close();
+    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) throws IOException {
+	File output = new File("proccess_output.txt");
+	PrintWriter w = new PrintWriter(output);
+	String prcstat = "";
+
+	for (int i = 0; i < finishedProcesses.size(); i++) {
+	    prcstat += "\n-------------------------";
+	    prcstat += "\nProcess ID: " + finishedProcesses.get(i).getId();
+	    prcstat += "\nProgram name: " + finishedProcesses.get(i).getName();
+	    prcstat += "\nReady queue entry time: " + finishedProcesses.get(i).getReadyQueueEntryTime();
+	    prcstat += "\nNo. of times in the CPU: " + finishedProcesses.get(i).getTotalCPUTime();
+	    prcstat += "\nTotal time spent in CPU: " + finishedProcesses.get(i).getCPUBurstTime();
+	    prcstat += "\nNo. of times in I/O: " + finishedProcesses.get(i).getIOTotalCounter();
+	    prcstat += "\nTotal time spent in I/O: " + finishedProcesses.get(i).getIOTotalTime();
+	    prcstat += "\nTotal time waiting for memory: " + finishedProcesses.get(i).getMemoryWaitCounter();
+	    prcstat += "\nNo. of times it was preempted: " + finishedProcesses.get(i).getPreemptionCounter();
+	    prcstat += "\nTime it was TERMINATED/KILLED: " + finishedProcesses.get(i).getTerminationKillTime();
+	    prcstat += "\nFinal state: " + finishedProcesses.get(i).getState();
+//	    prcstat += "\nCPU utilization: " + 
+	    prcstat += "\n-------------------------";
+	    w.println(prcstat);
+	    prcstat = "";
+	}
+	w.close();
     }
 
     public static void writeFile(int n) throws IOException {
-        File f = new File("input.txt");
-        PrintWriter w = new PrintWriter(f);
+	File f = new File("input.txt");
+	PrintWriter w = new PrintWriter(f);
 
-        for (int i = 0; i < n; i++) {
-            w.println(getRandomProcess(i));
-        }
+	for (int i = 0; i < n; i++) {
+	    w.println(getRandomProcess(i));
+	}
 
-        w.close();
+	w.close();
     }
 
     private static Process getRandomProcess(int i) {
-        Process process = new Process();
-        process.setId(i);
-        process.setName(generateProcessName()); // Change to string later.
-        process.setArrivalTime(getNumber(1, 80));
-        int n = getNumber(4, 9);
+	Process process = new Process();
+	process.setName(generateProcessName()); // Change to string later.
+	process.setArrivalTime(getNumber(1, 80));
+	int n = getNumber(4, 9);
 
-        List<Integer> cpu = new ArrayList<>(), memory = new ArrayList<>(), io = new ArrayList<>();
-        process.setCPUBursts(cpu);
-        process.setMemoryUsage(memory);
-        process.setIOBursts(io);
-        int mem = 0, c;
+	List<Integer> cpu = new ArrayList<>(), memory = new ArrayList<>(), io = new ArrayList<>();
+	process.setCPUBursts(cpu);
+	process.setMemoryUsage(memory);
+	process.setIOBursts(io);
+	int mem = 0, c;
 
-        for (int j = 0; j < n; j++) {
-            cpu.add(getNumber(10, 100));
-            while (mem + (c = getNumber(5, 200) * (getNumber(1, 100) > 50 ? 1 : -1)) < 0)
-                ;
-            memory.add(c);
-            mem += c;
-            io.add(getNumber(20, 60));
-        }
+	for (int j = 0; j < n; j++) {
+	    cpu.add(getNumber(10, 100));
+	    while (mem + (c = getNumber(5, 200) * (getNumber(1, 100) > 50 ? 1 : -1)) < 0)
+		;
+	    memory.add(c);
+	    mem += c;
+	    io.add(getNumber(20, 60));
+	}
 
-        io.remove(io.size() -1);
-        return process;
+	io.remove(io.size() - 1);
+	return process;
     }
 
     private static int getNumber(int min, int max) {
-        return random.nextInt((max - min) + 1) + min;
+	return random.nextInt((max - min) + 1) + min;
     }
 
     private static String generateProcessName() {
-        String output = "";
+	String output = "";
 
-        for (int i = 0; i < 8; i++) {
-            output += (char) getNumber('A', 'Z');
-        }
+	for (int i = 0; i < 8; i++) {
+	    output += (char) getNumber('A', 'Z');
+	}
 
-        return output;
+	return output;
     }
 
 }

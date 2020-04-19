@@ -10,7 +10,7 @@ public class Process implements Comparable<Process> {
 	public List<Integer> CPUBursts;
 	public List<Integer> IOBursts;
 	public List<Integer> memoryUsage;
-	private int readyQueueEntryTime;
+	private int readyQueueEntryTime = -1;
 	private int CPUCounter;
 	private int IOTotalCounter;
 	private int IOTotalTime;
@@ -29,7 +29,7 @@ public class Process implements Comparable<Process> {
 		this.CPUBursts = CPUBursts;
 		this.IOBursts = IOBursts;
 		this.memoryUsage = memoryUsage;
-		this.id = (int) Math.random();		
+		this.id = idCounter++;		
 	}
 
 	public int getCPUBurstTime() {
@@ -76,14 +76,6 @@ public class Process implements Comparable<Process> {
 		this.totalCPUTime++;
 	}
 
-	public static int getIdCounter() {
-		return idCounter;
-	}
-
-	public static void setIdCounter(int idCounter) {
-		Process.idCounter = idCounter;
-	}
-
 	public ProcessState getState() {
 		return state;
 	}
@@ -100,9 +92,6 @@ public class Process implements Comparable<Process> {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public int getArrivalTime() {
 		return arrivalTime;
@@ -194,10 +183,6 @@ public class Process implements Comparable<Process> {
 
 	public int getTotalCPUTime() {
 		return totalCPUTime;
-	}
-
-	public void setTotalCPUTime(int totalCPUTime) {
-		this.totalCPUTime = totalCPUTime;
 	}
 
 	@Override

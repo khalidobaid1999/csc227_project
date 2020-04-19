@@ -73,6 +73,8 @@ public class Memory {
         }
 
         reverseMemoryAllocation(largestWaitingProcess);
+        //TODO fix kill time
+        largestWaitingProcess.setTerminationKillTime(-1);
         largestWaitingProcess.setState(ProcessState.KILLED);
         finishedProcesses.add(largestWaitingProcess);
         waitingQueue.remove(largestWaitingProcess);
