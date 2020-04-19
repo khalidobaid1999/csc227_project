@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public class Process implements Comparable<Process> {
 	private static int idCounter = 0;
@@ -6,9 +6,10 @@ public class Process implements Comparable<Process> {
 	private ProcessState state;
 	private String name;
 	private int id;
-	public ArrayList<Integer> CPUBursts;
-	public ArrayList<Integer> IOBursts;
-	public ArrayList<Integer> memoryUsage;
+	private int arrivalTime;
+	public List<Integer> CPUBursts;
+	public List<Integer> IOBursts;
+	public List<Integer> memoryUsage;
 	private int readyQueueEntryTime;
 	private int CPUCounter;
 	private int IOTotalCounter;
@@ -17,6 +18,10 @@ public class Process implements Comparable<Process> {
 	private int terminationKillTime;
 	private int preemptionCounter;
 	private int totalCPUTime;
+
+	public Process() {
+
+	}
 
 	// constructor
 	public Process(String name,ArrayList<Integer> CPUBursts,ArrayList<Integer> IOBursts,ArrayList<Integer> memoryUsage) {
@@ -69,6 +74,130 @@ public class Process implements Comparable<Process> {
 
 	public void incrementCPUTime() {
 		this.totalCPUTime++;
+	}
+
+	public static int getIdCounter() {
+		return idCounter;
+	}
+
+	public static void setIdCounter(int idCounter) {
+		Process.idCounter = idCounter;
+	}
+
+	public ProcessState getState() {
+		return state;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getArrivalTime() {
+		return arrivalTime;
+	}
+
+	public void setArrivalTime(int arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+
+	public List<Integer> getCPUBursts() {
+		return CPUBursts;
+	}
+
+	public void setCPUBursts(List<Integer> CPUBursts) {
+		this.CPUBursts = CPUBursts;
+	}
+
+	public List<Integer> getIOBursts() {
+		return IOBursts;
+	}
+
+	public void setIOBursts(List<Integer> IOBursts) {
+		this.IOBursts = IOBursts;
+	}
+
+	public List<Integer> getMemoryUsage() {
+		return memoryUsage;
+	}
+
+	public void setMemoryUsage(List<Integer> memoryUsage) {
+		this.memoryUsage = memoryUsage;
+	}
+
+	public int getReadyQueueEntryTime() {
+		return readyQueueEntryTime;
+	}
+
+	public void setReadyQueueEntryTime(int readyQueueEntryTime) {
+		this.readyQueueEntryTime = readyQueueEntryTime;
+	}
+
+	public int getCPUCounter() {
+		return CPUCounter;
+	}
+
+	public void setCPUCounter(int CPUCounter) {
+		this.CPUCounter = CPUCounter;
+	}
+
+	public int getIOTotalCounter() {
+		return IOTotalCounter;
+	}
+
+	public void setIOTotalCounter(int IOTotalCounter) {
+		this.IOTotalCounter = IOTotalCounter;
+	}
+
+	public int getIOTotalTime() {
+		return IOTotalTime;
+	}
+
+	public void setIOTotalTime(int IOTotalTime) {
+		this.IOTotalTime = IOTotalTime;
+	}
+
+	public int getMemoryWaitCounter() {
+		return memoryWaitCounter;
+	}
+
+	public void setMemoryWaitCounter(int memoryWaitCounter) {
+		this.memoryWaitCounter = memoryWaitCounter;
+	}
+
+	public int getTerminationKillTime() {
+		return terminationKillTime;
+	}
+
+	public void setTerminationKillTime(int terminationKillTime) {
+		this.terminationKillTime = terminationKillTime;
+	}
+
+	public int getPreemptionCounter() {
+		return preemptionCounter;
+	}
+
+	public void setPreemptionCounter(int preemptionCounter) {
+		this.preemptionCounter = preemptionCounter;
+	}
+
+	public int getTotalCPUTime() {
+		return totalCPUTime;
+	}
+
+	public void setTotalCPUTime(int totalCPUTime) {
+		this.totalCPUTime = totalCPUTime;
 	}
 
 	@Override
