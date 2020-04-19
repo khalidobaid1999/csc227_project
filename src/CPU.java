@@ -70,6 +70,7 @@ public class CPU extends Thread {
 
 	    if (runningProcess.getIOCounter() == runningProcess.IOBursts.size()) {
 		runningProcess.setState(ProcessState.TERMINATED);
+		runningProcess.setTerminationKillTime(Clock.instance.cpuCounter);
 		m.reverseMemoryAllocation(runningProcess);
 		m.finishedProcesses.add(runningProcess);
 	    } else {

@@ -75,8 +75,30 @@ public class Util {
     }
 
     // TODO: Implement the process statistics output
-    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) {
-	return;
+    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) throws IOException {
+	File output = new File("proccess_output.txt");
+	PrintWriter w = new PrintWriter(output);
+	String prcstat = "";
+
+	for (int i = 0; i < finishedProcesses.size(); i++) {
+	    prcstat += "\n-------------------------";
+	    prcstat += "\nProcess ID: " + finishedProcesses.get(i).getId();
+	    prcstat += "\nProgram name: " + finishedProcesses.get(i).getName();
+	    prcstat += "\nReady queue entry time: " + finishedProcesses.get(i).getReadyQueueEntryTime();
+	    prcstat += "\nNo. of times in the CPU: " + finishedProcesses.get(i).getTotalCPUTime();
+	    prcstat += "\nTotal time spent in CPU: " + finishedProcesses.get(i).getCPUBurstTime();
+	    prcstat += "\nNo. of times in I/O: " + finishedProcesses.get(i).getIOTotalCounter();
+	    prcstat += "\nTotal time spent in I/O: " + finishedProcesses.get(i).getIOTotalTime();
+	    prcstat += "\nTotal time waiting for memory: " + finishedProcesses.get(i).getMemoryWaitCounter();
+	    prcstat += "\nNo. of times it was preempted: " + finishedProcesses.get(i).getPreemptionCounter();
+	    prcstat += "\nTime it was TERMINATED/KILLED: " + finishedProcesses.get(i).getTerminationKillTime();
+	    prcstat += "\nFinal state: " + finishedProcesses.get(i).getState();
+//	    prcstat += "\nCPU utilization: " + 
+	    prcstat += "\n-------------------------";
+	    w.println(prcstat);
+	    prcstat = "";
+	}
+	w.close();
     }
 
     public static void writeFile(int n) throws IOException {
@@ -92,7 +114,6 @@ public class Util {
 
     private static Process getRandomProcess(int i) {
 	Process process = new Process();
-	process.setId(i);
 	process.setName(generateProcessName()); // Change to string later.
 	process.setArrivalTime(getNumber(1, 80));
 	int n = getNumber(4, 9);
