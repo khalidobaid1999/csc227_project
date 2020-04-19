@@ -10,8 +10,15 @@ public class Util {
         File f = new File("sampleFile.txt");
         try {
             Queue<Process> readFile = readFile(f);
-            while(!readFile.isEmpty())
-                System.out.println(readFile.poll());
+            Memory mainMemory = new Memory(readFile,1024);
+            CPU mainProcessor = new CPU(mainMemory);
+
+            mainMemory.longTermScheduele();
+            while(!mainMemory.areQueuesEmpty() || mainProcessor.runningProcess!=null){  
+                mainProcessor.simulateMachineExecuteCycle();
+            }
+            System.out.println(mainMemory.finishedProcesses);
+           
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -53,6 +60,11 @@ public class Util {
 
         sc.close();
         return q;
+    }
+
+    //TODO: Implement the process statistics output
+    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses){
+        return;
     }
 
 }

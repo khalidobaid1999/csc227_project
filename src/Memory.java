@@ -1,5 +1,6 @@
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -13,22 +14,28 @@ public class Memory {
 
     public Memory(Queue<Process> allocationQueue, int size){
         this.allocationQueue = allocationQueue;
-        this.size = size;
+        this.waitingQueue = new LinkedList<Process>();
+        this.readyQueue = new PriorityQueue<Process>();
+        this.finishedProcesses = new LinkedList<Process>();
+        this.size = 0;
     }
 
+    //TODO: Test memory usage logic
     public void longTermScheduele(){
         if(allocationQueue.isEmpty()){
             return;
         }
-
-        while(allocationQueue.peek().memoryUsage.get(0) + size < 0.85 * 1024){
+        
+        while(!allocationQueue.isEmpty() && allocationQueue.peek().memoryUsage.get(0) + size < 0.85 * 1024){
             Process process = allocationQueue.poll();
             process.setState(ProcessState.READY);
             readyQueue.add(process);
+            size += process.memoryUsage.get(0);
         }
         
     }
 
+    //TODO: Impelement deadlock handling
     public boolean isDeadlock(){
         Iterator<Process> waitingIterator = waitingQueue.iterator();
         boolean flag = false;
@@ -70,13 +77,12 @@ public class Memory {
             
             if(burst > 0){
                 p.IOBursts.set(p.getIOCounter() - 1, --burst);
-                p.addToTotalIOTime(time);
-            }
-
-            if(this.size + p.memoryUsage.get(p.getIOCounter() - 1) < 1024){
+                p.addToTotalIOTime(time); 
+            } else if(size + p.memoryUsage.get(p.getIOCounter() - 1) < 1024){
                 p.setState(ProcessState.READY);
                 waitingQueue.remove(p);
                 readyQueue.add(p);
+                size += p.memoryUsage.get(p.getIOCounter() - 1);
             } else {
                 p.incrementMemoryWaitCounter();
             }
