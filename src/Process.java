@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Process {
+public class Process implements Comparable<Process> {
 	private static int idCounter = 0;
 	// class attributes
 	private ProcessState state;
@@ -74,5 +74,10 @@ public class Process {
 	@Override
 	public String toString() {
 		return name + " " + CPUBursts.toString() + memoryUsage.toString() + IOBursts.toString();
+	}
+
+	@Override
+	public int compareTo(Process o) {
+		return this.CPUBursts.get(this.getIOCounter()) - o.CPUBursts.get(o.getIOCounter());
 	}
 }
