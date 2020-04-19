@@ -206,7 +206,7 @@ public class Process implements Comparable<Process> {
 	}
 
 	@Override
-	public int compareTo(Process o) {
+	public synchronized int compareTo(Process o) {
 		return this.CPUBursts.get(this.getIOCounter()) - o.CPUBursts.get(o.getIOCounter());
 	}
 }
