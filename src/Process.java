@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Process {
 	private static int idCounter = 0;
@@ -21,24 +19,12 @@ public class Process {
 	private int totalCPUTime;
 
 	// constructor
-	public Process(Scanner sc) {
-		this.CPUBursts = new ArrayList<Integer>();
-		this.IOBursts = new ArrayList<Integer>();
-		this.memoryUsage = new ArrayList<Integer>();
-		this.id = idCounter++;
-		sc.nextLine();
-		this.name = sc.nextLine();
-		System.out.println("name: " + name);
-		int m = sc.nextInt();
-		for (int i = 0; i < m; i++) {
-			CPUBursts.add(sc.nextInt());
-			memoryUsage.add(sc.nextInt());
-			IOBursts.add(sc.nextInt());
-		}
-		CPUBursts.add(sc.nextInt());
-		memoryUsage.add(sc.nextInt());
-		if (sc.nextInt() != -1)
-			throw new InputMismatchException();
+	public Process(String name,ArrayList<Integer> CPUBursts,ArrayList<Integer> IOBursts,ArrayList<Integer> memoryUsage) {
+		this.name = name;
+		this.CPUBursts = CPUBursts;
+		this.IOBursts = IOBursts;
+		this.memoryUsage = memoryUsage;
+		this.id = (int) Math.random();		
 	}
 
 	public int getCPUBurstTime() {
