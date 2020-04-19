@@ -1,7 +1,7 @@
 
 public class Clock extends Thread {
     public static Clock instance;
-
+    
     public static void factory(Memory mainMemory, CPU mainProcessor, Object onFinish) {
 	if (instance == null) {
 	    instance = new Clock();
@@ -12,6 +12,7 @@ public class Clock extends Thread {
     }
 
     public int cpuCounter;
+    public int nullTime;
     private Memory mainMemory;
     private CPU mainProcessor;
     private Object onFinish;
@@ -39,7 +40,6 @@ public class Clock extends Thread {
 		    try {
 			mainProcessor.lock.wait(1);
 		    } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
 //		    System.out.println("cycle waiting done");

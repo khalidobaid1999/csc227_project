@@ -22,7 +22,6 @@ public class CPU extends Thread {
 //		    System.out.println("cpu waiting done");
 
 		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
 	    }
@@ -42,8 +41,6 @@ public class CPU extends Thread {
 
     private void simulateMachineExecuteCycle() {
 
-	System.out.println(Clock.instance.cpuCounter + " " + m.waitingQueue.size() + " " + m.readyQueue.size() + " " + m.allocationQueue.size() + " "
-		+ runningProcess + " " + m.size);
 	// System.out.println(Clock.instance.cpuCounter);
 	// System.out.println(m.readyQueue);
 	// System.out.println(m.waitingQueue);
@@ -54,17 +51,21 @@ public class CPU extends Thread {
 
 	    if (p == null) {
 		m.decrementWaitingTime(1);
+		Clock.instance.nullTime++;
 		if (isDeadlock()) {
 		    int memSize = m.size;
 		    m.terminateLargestWaitingProcess();
 		    System.out.println(memSize + " " + m.size);
 		    System.out.println("DEADLOCK! deleting largest waiting process");
 		}
+		System.out.println(Clock.instance.cpuCounter + " " + m.waitingQueue.size() + " " + m.readyQueue.size() + " " + m.allocationQueue.size() + " "
+			+ runningProcess + " " + m.size);
 		return;
 	    }
 	    runningProcess = p;
 	}
-
+	System.out.println(Clock.instance.cpuCounter + " " + m.waitingQueue.size() + " " + m.readyQueue.size() + " " + m.allocationQueue.size() + " "
+		+ runningProcess + " " + m.size);
 	if (runningProcess.CPUBursts.get(runningProcess.getIOCounter()) == 0) {
 	    // System.out.println(runningProcess);
 

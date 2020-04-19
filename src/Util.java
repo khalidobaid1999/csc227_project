@@ -10,7 +10,7 @@ public class Util {
     public static void main(String[] args) {
 	File f = new File("input.txt");
 	try {
-	    writeFile(10);
+	    writeFile(1000);
 
 	    Queue<Process> readFile = readFile(f);
 	    Memory mainMemory = new Memory(readFile, 1024);
@@ -25,9 +25,9 @@ public class Util {
 		onFinish.wait();
 	    }
 	    System.out.println(mainMemory.finishedProcesses);
-	    System.exit(0); 
+	    writeProcessOutputs((LinkedList<Process>) mainMemory.finishedProcesses);
+	    System.exit(0);
 	} catch (Exception e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }
@@ -51,25 +51,25 @@ public class Util {
 	    currentProcessName = split[0].split(" ")[0];
 	    getList(currentCPUbursts, split[1]);
 	    getList(currentMemoryUsage, split[2]);
-        getList(currentIObursts, split[3]);
-        int arrivalTime = Integer.parseInt(currentLine.split(" ")[1]);
+	    getList(currentIObursts, split[3]);
+	    int arrivalTime = Integer.parseInt(currentLine.split(" ")[1]);
 
-        Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
-        p.setArrivalTime(arrivalTime);
+	    Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
+	    p.setArrivalTime(arrivalTime);
 	    q.add(p);
 
 	    currentIObursts = new ArrayList<Integer>();
 	    currentCPUbursts = new ArrayList<Integer>();
 	    currentMemoryUsage = new ArrayList<Integer>();
 
-    }
-    
-    Collections.sort(q,new Comparator<Process>(){
-        @Override
-        public int compare(Process a, Process b){
-            return a.getArrivalTime() - b.getArrivalTime();
-        }
-    });
+	}
+
+	Collections.sort(q, new Comparator<Process>() {
+	    @Override
+	    public int compare(Process a, Process b) {
+		return a.getArrivalTime() - b.getArrivalTime();
+	    }
+	});
 
 	sc.close();
 	return q;
@@ -83,11 +83,10 @@ public class Util {
 	}
     }
 
-    // TODO: Implement the process statistics output
     public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) throws IOException {
 	File output = new File("proccess_output.txt");
 	PrintWriter w = new PrintWriter(output);
-	String prcstat = "";
+	String prcstat = "CPU Util:" + ((Clock.instance.cpuCounter - Clock.instance.nullTime) / (double) Clock.instance.cpuCounter) * 100 + "%";
 
 	for (int i = 0; i < finishedProcesses.size(); i++) {
 	    prcstat += "\n-------------------------";

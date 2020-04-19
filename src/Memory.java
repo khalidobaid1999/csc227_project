@@ -29,7 +29,6 @@ public class Memory extends Thread {
 		try {
 		    lock.wait();
 		} catch (InterruptedException e) {
-		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
 		longTermScheduele();
@@ -37,7 +36,6 @@ public class Memory extends Thread {
 	}
     }
 
-    // TODO: Test memory usage logic
     public void longTermScheduele() {
 	synchronized (lock) {
 	    if (allocationQueue.isEmpty()) {
@@ -99,6 +97,7 @@ public class Memory extends Thread {
 
 	reverseMemoryAllocation(largestWaitingProcess);
 	largestWaitingProcess.setState(ProcessState.KILLED);
+	largestWaitingProcess.setTerminationKillTime(Clock.instance.cpuCounter);
 	finishedProcesses.add(largestWaitingProcess);
 	waitingQueue.remove(largestWaitingProcess);
     }
