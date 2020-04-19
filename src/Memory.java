@@ -99,6 +99,8 @@ public class Memory {
                 largestWaitingProcess = currentProcess;
             }
         }
+        largestWaitingProcess.setState(ProcessState.KILLED);
+        finishedProcesses.add(largestWaitingProcess);
         waitingQueue.remove(largestWaitingProcess);
     }
 }
