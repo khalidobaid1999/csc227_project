@@ -19,6 +19,9 @@ public class Util {
             mainMemory.longTermScheduele();
             while (!mainMemory.areQueuesEmpty() || mainProcessor.runningProcess != null)
             {
+                if(mainProcessor.currentCPUTime % 200 == 0){
+                    mainMemory.longTermScheduele();
+                }
             mainProcessor.simulateMachineExecuteCycle();
             }
             System.out.println(mainMemory.finishedProcesses);

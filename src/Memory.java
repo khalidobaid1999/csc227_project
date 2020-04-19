@@ -49,11 +49,12 @@ public class Memory {
             if(burst > 0){
                 p.IOBursts.set(p.getIOCounter() - 1, --burst);
                 p.addToTotalIOTime(time); 
-            } else if(size + p.memoryUsage.get(p.getIOCounter() - 1) < 1024){
+            }
+            if(size + p.memoryUsage.get(p.getIOCounter()) < 1024 && burst == 0){
                 p.setState(ProcessState.READY);
                 queue.remove();
                 readyQueue.add(p);
-                size += p.memoryUsage.get(p.getIOCounter() - 1);
+                size += p.memoryUsage.get(p.getIOCounter());
             } else {
                 p.incrementMemoryWaitCounter();
             }
@@ -70,8 +71,22 @@ public class Memory {
                 largestWaitingProcess = currentProcess;
             }
         }
+
+        reverseMemoryAllocation(largestWaitingProcess);
         largestWaitingProcess.setState(ProcessState.KILLED);
         finishedProcesses.add(largestWaitingProcess);
         waitingQueue.remove(largestWaitingProcess);
+    }
+
+    public void reverseMemoryAllocation(Process p){
+        if(p.getState() == ProcessState.TERMINATED){
+            for(int i = 0; i<p.memoryUsage.size(); i++){
+                size -= p.memoryUsage.get(i);
+            }   
+        } else {
+            for(int i = 0; i<p.getIOCounter(); i++){
+                size -= p.memoryUsage.get(i);
+            }
+        }
     }
 }
