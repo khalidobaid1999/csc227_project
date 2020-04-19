@@ -10,7 +10,7 @@ public class Util {
     public static void main(String[] args) {
 	File f = new File("input.txt");
 	try {
-//	    writeFile(10);
+	    writeFile(10);
 
 	    Queue<Process> readFile = readFile(f);
 	    Memory mainMemory = new Memory(readFile, 1024);
@@ -35,7 +35,7 @@ public class Util {
     }
 
     public static Queue<Process> readFile(File f) throws FileNotFoundException {
-	Queue<Process> q = new LinkedList<Process>();
+	LinkedList<Process> q = new LinkedList<Process>();
 	Scanner sc = new Scanner(f);
 
 	while (sc.hasNextLine()) {
@@ -50,19 +50,28 @@ public class Util {
 		continue;
 	    }
 	    String[] split = currentLine.split("\\[");
-	    currentProcessName = split[0];
+	    currentProcessName = split[0].split(" ")[0];
 	    getList(currentCPUbursts, split[1]);
 	    getList(currentMemoryUsage, split[2]);
-	    getList(currentIObursts, split[3]);
+        getList(currentIObursts, split[3]);
+        int arrivalTime = Integer.parseInt(currentLine.split(" ")[1]);
 
-	    Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
+        Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
+        p.setArrivalTime(arrivalTime);
 	    q.add(p);
 
 	    currentIObursts = new ArrayList<Integer>();
 	    currentCPUbursts = new ArrayList<Integer>();
 	    currentMemoryUsage = new ArrayList<Integer>();
 
-	}
+    }
+    
+    Collections.sort(q,new Comparator<Process>(){
+        @Override
+        public int compare(Process a, Process b){
+            return a.getArrivalTime() - b.getArrivalTime();
+        }
+    });
 
 	sc.close();
 	return q;
