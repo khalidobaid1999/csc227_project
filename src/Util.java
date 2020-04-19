@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
+import com.sun.java.swing.action.FinishAction;
+
 public class Util {
     static Random random = new Random();
 
@@ -25,6 +27,9 @@ public class Util {
             mainProcessor.simulateMachineExecuteCycle();
             }
             System.out.println(mainMemory.finishedProcesses);
+            
+            //Test this below to generate a process_output.txt file
+            //writeProcessOutputs((LinkedList)mainMemory.finishedProcesses);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -75,8 +80,30 @@ public class Util {
     }
 
     // TODO: Implement the process statistics output
-    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) {
-        return;
+    public static void writeProcessOutputs(LinkedList<Process> finishedProcesses) throws IOException{
+        File output = new File("proccess_output.txt");
+        PrintWriter w = new PrintWriter(output);
+        String prcstat = "";
+        
+    	for(int i = 0; i < finishedProcesses.size(); i++) {
+        	prcstat += "\n-------------------------";
+        	prcstat += "\nProcess ID: "+finishedProcesses.get(i).getId();
+        	prcstat += "\nProgram name: "+finishedProcesses.get(i).getName();
+        	prcstat += "\nReady queue entry time: "+finishedProcesses.get(i).getReadyQueueEntryTime();
+        	prcstat += "\nNo. of times in the CPU: "+finishedProcesses.get(i).getCPUCounter();
+        	prcstat += "\nTotal time spent in CPU: "+finishedProcesses.get(i).getCPUBurstTime();
+        	prcstat += "\nNo. of times in I/O: "+finishedProcesses.get(i).getIOTotalCounter();
+        	prcstat += "\nTotal time spent in I/O: "+finishedProcesses.get(i).getIOTotalTime();
+        	prcstat += "\nNo. of times waiting for memory: "+finishedProcesses.get(i).getMemoryWaitCounter();
+        	prcstat += "\nNo. of times it was preempted: "+finishedProcesses.get(i).getPreemptionCounter();
+        	prcstat += "\nNo. of times it was TERMINATED/KILLED: "+finishedProcesses.get(i).getTerminationKillTime();
+        	prcstat += "\nFinal state: "+finishedProcesses.get(i).getState();
+        	prcstat += "\nCPU utilization: "+finishedProcesses.get(i).getTotalCPUTime();
+        	prcstat += "\n-------------------------";
+        	w.println(prcstat);
+        	prcstat = "";
+        }
+    	w.close();
     }
 
     public static void writeFile(int n) throws IOException {
