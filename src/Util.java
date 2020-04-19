@@ -10,53 +10,22 @@ public class Util {
     public static void main(String[] args) {
 	File f = new File("input.txt");
 	try {
-//	    writeFile(100);
+	    writeFile(100);
 
 	    Queue<Process> readFile = readFile(f);
 	    Memory mainMemory = new Memory(readFile, 1024);
 	    CPU mainProcessor = new CPU(mainMemory);
+	    Object onFinish = new Object();
+	    Clock.factory(mainMemory, mainProcessor, onFinish);
 
-//            mainMemory.longTermScheduele();
-//            while (!mainMemory.areQueuesEmpty() || mainProcessor.runningProcess != null)
-//            { 
-//                if(mainProcessor.currentCPUTime % 200 == 0){
-//                    mainMemory.longTermScheduele();
-//                }
-//            mainProcessor.simulateMachineExecuteCycle();
-//            }
 	    mainMemory.start();
-
 	    mainProcessor.start();
-	    int i = 0;
-	    Thread.sleep(500);
-
-	    while (!mainMemory.areQueuesEmpty() || mainProcessor.runningProcess != null) {
-		if (i % 200 == 0) {
-		    synchronized (mainMemory.lock) {
-			mainMemory.lock.notify();
-		    }
-		}
-		while (!mainProcessor.excuting)
-
-		    synchronized (mainProcessor.lock) {
-//		    System.out.println("notifying cpu");
-			mainProcessor.lock.notifyAll();
-//		    System.out.println("notified cpu");
-
-		    }
-		while (mainProcessor.excuting)
-
-		    synchronized (mainProcessor.lock) {
-//		    System.out.println("cycle waiting");
-			mainProcessor.lock.wait(1);
-//		    System.out.println("cycle waiting done");
-
-		    }
-
-		i++;
+	    Clock.instance.start();
+	    synchronized (onFinish) {
+		onFinish.wait();
 	    }
 	    System.out.println(mainMemory.finishedProcesses);
-	    System.exit(0);
+	    System.exit(0); 
 	} catch (Exception e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();

@@ -191,7 +191,7 @@ public class Process implements Comparable<Process> {
 	public void setPreemptionCounter(int preemptionCounter) {
 		this.preemptionCounter = preemptionCounter;
 	}
-
+ 
 	public int getTotalCPUTime() {
 		return totalCPUTime;
 	}

@@ -2,7 +2,6 @@ import java.util.Iterator;
 
 public class CPU extends Thread {
     public Process runningProcess;
-    public int currentCPUTime;
     private Memory m;
     public boolean excuting = false;
     public Object lock = new Object();
@@ -43,12 +42,12 @@ public class CPU extends Thread {
 
     private void simulateMachineExecuteCycle() {
 
-	System.out.println(currentCPUTime + " " + m.waitingQueue.size() + " " + m.readyQueue.size() + " " + m.allocationQueue.size() + " "
+	System.out.println(Clock.instance.cpuCounter + " " + m.waitingQueue.size() + " " + m.readyQueue.size() + " " + m.allocationQueue.size() + " "
 		+ runningProcess + " " + m.size);
-	// System.out.println(currentCPUTime);
+	// System.out.println(Clock.instance.cpuCounter);
 	// System.out.println(m.readyQueue);
 	// System.out.println(m.waitingQueue);
-	currentCPUTime++;
+	Clock.instance.cpuCounter++;
 
 	if (runningProcess == null) {
 	    Process p = getFromReadyQueue();
@@ -95,7 +94,7 @@ public class CPU extends Thread {
     }
 
     public void incrementCPUTime(int delta) {
-	this.currentCPUTime += delta;
+	Clock.instance.cpuCounter += delta;
 	try {
 //	    Thread.sleep(delta);
 	} catch (Exception e) {
@@ -110,7 +109,7 @@ public class CPU extends Thread {
 	    Process cp = (m.readyQueue.poll());
 	    cp.incrementCPUCounter();
 	    cp.setState(ProcessState.RUNNING);
-	    cp.setReadyQueueEmtryTime(currentCPUTime);
+	    cp.setReadyQueueEmtryTime(Clock.instance.cpuCounter);
 	    return cp;
 	}
     }
