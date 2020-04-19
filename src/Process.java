@@ -202,7 +202,7 @@ public class Process implements Comparable<Process> {
 
 	@Override
 	public String toString() {
-		return name + " " + CPUBursts.toString() + memoryUsage.toString() + IOBursts.toString();
+		return name + " " + CPUBursts.toString() + " " + memoryUsage.toString() + " " + IOBursts.toString();
 	}
 
 	@Override
