@@ -80,7 +80,7 @@ public class Memory {
                 p.addToTotalIOTime(time); 
             } else if(size + p.memoryUsage.get(p.getIOCounter() - 1) < 1024){
                 p.setState(ProcessState.READY);
-                waitingQueue.remove(p);
+                queue.remove();
                 readyQueue.add(p);
                 size += p.memoryUsage.get(p.getIOCounter() - 1);
             } else {

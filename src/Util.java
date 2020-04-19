@@ -49,8 +49,7 @@ public class Util {
             getList(currentCPUbursts, split[1]);
             getList(currentMemoryUsage, split[2]);
             getList(currentIObursts, split[3]);
-            currentCPUbursts.remove(Integer.valueOf(-1));
-
+            
             Process p = new Process(currentProcessName, currentCPUbursts, currentIObursts, currentMemoryUsage);
             q.add(p);
 
@@ -110,7 +109,7 @@ public class Util {
             io.add(getNumber(20, 60));
         }
 
-        io.set(io.size() - 1, -1);
+        io.remove(io.size() -1);
         return process;
     }
 
